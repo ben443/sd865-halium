@@ -1,22 +1,32 @@
-name: Build Kernel
+name: Build Workflow
 
 on:
-  workflow_dispatch: # Allows manual triggering of the workflow
+  push:
+    branches:
+      - main
+  pull_request:
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v3
+      # Step 1: Checkout the repository
+      - name: Checkout code
+        uses: actions/checkout@v3
 
-    - name: Set up dependencies
-      run: |
-        sudo apt-get update
-        sudo apt-get install -y build-essential gcc make libncurses-dev bison flex libssl-dev bc
+      # Step 2: Install Nix package manager
+      - name: Install Nix
+        run: curl -L https://nixos.org/nix/install | sh
 
-    - name: Run build script
-      run: |
-        chmod +x make.sh
-        ./make.sh
+      # Step 3: Source Nix setup script
+      - name: Source Nix
+        run: . /home/runner/.nix-profile/etc/profile.d/nix.sh
+
+      # Step 4: Set up the environment with make-env.nix
+      - name: Setup Environment
+        run: nix-shell make-env.nix
+
+      # Step 5: Execute make.sh
+      - name: Run make.sh
+        run: ./make.sh
