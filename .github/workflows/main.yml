@@ -1,0 +1,22 @@
+name: Build Kernel
+
+on:
+  workflow_dispatch: # Allows manual triggering of the workflow
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Set up dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y build-essential gcc make libncurses-dev bison flex libssl-dev bc
+
+    - name: Run build script
+      run: |
+        chmod +x build_kernel.sh
+        ./build_kernel.sh
