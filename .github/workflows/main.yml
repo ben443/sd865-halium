@@ -18,5 +18,5 @@ jobs:
 
     - name: Run build script
       run: |
-        chmod +x build_kernel.sh
-        ./build_kernel.sh
+        chmod +x make.sh
+        ./make.sh
