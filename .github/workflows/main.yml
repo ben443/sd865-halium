@@ -34,9 +34,16 @@ jobs:
           make defconfig
           make -j$(nproc)
 
-      # Step 5: Upload build artifacts
+      # Step 5: Verify Kernel Artifacts
+      - name: Verify Kernel Artifacts
+        run: |
+          ls -la arch/arm64/boot/
+          ls -la arch/arm64/boot/dts/
+        continue-on-error: false
+
+      # Step 6: Upload build artifacts
       - name: Upload Kernel Artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: kernel-build
           path: |
